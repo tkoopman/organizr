@@ -1,5 +1,7 @@
 #!/usr/bin/with-contenv bash
 
+mkdir -p /run/nginx
+
 cd /config/keys
 
 #Required

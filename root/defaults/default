@@ -30,9 +30,6 @@ server {
     
     # Referrer Policy
     add_header Referrer-Policy "no-referrer";
-    
-    # Hide PHP server output
-    more_clear_headers 'X-Powered-By';
 
 	location / {
 		try_files $uri $uri/ /index.html /index.php?$args =404;
