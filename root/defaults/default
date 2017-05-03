@@ -64,8 +64,7 @@ server {
 # notice this is within the same server block as the base
 # don't forget to generate the .htpasswd file as described on docker hub
 #	location ^~ /cp {
-#		auth_basic "Restricted";
-#		auth_basic_user_file /config/nginx/.htpasswd;
+#       auth_request /auth;
 #		include /config/nginx/proxy.conf;
 #		proxy_pass http://192.168.1.50:5050/cp;
 #	}
