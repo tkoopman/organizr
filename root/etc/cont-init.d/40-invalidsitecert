@@ -1,0 +1,40 @@
+#!/usr/bin/with-contenv bash
+
+cd /config/keys
+
+#Required
+domain=invalid.host.local
+commonname=$domain
+
+if [ -e "/config/keys/${domain}.crt" ] ; then
+  exit 0;
+fi
+ 
+#Dummy Org Details
+country=US
+state=New California Republic
+locality=Vault 15
+organization=Vault-Tec
+organizationalunit=Sales
+email=rep@invalid.host.local
+password=dummypassword
+ 
+echo "Generating key request for $domain"
+ 
+#Generate a key
+openssl genrsa -des3 -passout pass:$password -out $domain.key 2048 -noout
+ 
+#Remove passphrase from the key. Comment the line out to keep the passphrase
+echo "Removing passphrase from key"
+openssl rsa -in $domain.key -passin pass:$password -out $domain.key
+ 
+#Create the request
+echo "Creating CSR"
+openssl req -new -key $domain.key -out $domain.csr -passin pass:$password \
+    -subj "/C=$country/ST=$state/L=$locality/O=$organization/OU=$organizationalunit/CN=$commonname/emailAddress=$email"
+
+#Sign Cert
+openssl x509 -req -days 3650 -in $domain.csr -signkey $domain.key -out $domain.crt
+rm $domain.csr
+ 
+echo "Invalid cert created"
