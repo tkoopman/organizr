@@ -3,9 +3,24 @@
 # Update GeoIP
 mkdir -p /usr/share/GeoIP
 cd /usr/share/GeoIP
-wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz || { echo 'Could not download GeoLiteCountry, exiting.' ; exit 1; }
-gunzip -f GeoIP.dat.gz
-wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz || { echo 'Could not download GeoLiteCity, exiting.' ; exit 1; }
-gunzip -f GeoLiteCity.dat.gz
-wget http://download.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz || { echo 'Could not download GeoIPASNum, exiting.' ; exit 1; }
-gunzip -f GeoIPASNum.dat.gz
+
+STATUS=$(curl -O  -w '%{http_code}' http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz)
+if [ $STATUS -eq 200 ]; then
+    gunzip -f GeoIP.dat.gz
+else
+    echo 'Could not download GeoLiteCountry, exiting.'
+fi
+
+STATUS=$(curl -O  -w '%{http_code}' http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz)
+if [ $STATUS -eq 200 ]; then
+    gunzip -f GeoLiteCity.dat.gz
+else
+    echo 'Could not download GeoLiteCountry, exiting.'
+fi
+
+STATUS=$(curl -O  -w '%{http_code}' http://download.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz)
+if [ $STATUS -eq 200 ]; then
+    gunzip -f GeoIPASNum.dat.gz
+else
+    echo 'Could not download GeoLiteCountry, exiting.'
+fi
